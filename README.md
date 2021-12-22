@@ -1,2 +1,2 @@
 # Project-Factory1
-A Dockerized MERN web app to share side projects and find collaborators
+A Dockerized MERN web app to share side projects and find collaborators (In progress)
