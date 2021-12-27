@@ -1,14 +1,12 @@
 # Project Factory
 
 ## About
-This web app was designed to allow CS/SE students share software side projects and find collaborators
+This web app was designed to allow CS/SE students share software side projects and find collaborators. It was built using MongoDB, Express.js, React.js, and Node.js.
 
-## Installation
-Requirements:
-  1. MongoDB
-  2. ExpressJS
-  3. ReactJS
-  4. NodeJS
+## Dependecies
+  1. Node.js (app is tested to work for v17.3.00)
+  2. MongoDB Cloud
+  3. Docker
 
 ## Building/running:
   1. git clone https://github.com/seyon99/Project-Factory.git
