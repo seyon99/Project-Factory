@@ -1,7 +1,7 @@
 # Project Factory
 
 ## About
-This web app was designed to allow CS/SE students share software side projects and find collaborators. It was built using MongoDB, Express.js, React.js, and Node.js.
+This web app was designed to allow CS/SE students to share their software side projects and find collaborators. It was built using MongoDB, Express.js, React.js, and Node.js.
 
 ## Dependecies
   1. Node.js (app is tested to work for `v17.3.00`)
