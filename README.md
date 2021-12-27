@@ -8,7 +8,9 @@ This web app was designed to allow CS/SE students to share their software side p
   2. MongoDB Cloud
   3. Docker
 
-## Building/running:
-  1. git clone https://github.com/seyon99/Project-Factory.git
-  2. cd Project-Factory
-  3. Run docker-compose up in the terminal
+### Building/running:
+
+    git clone https://github.com/seyon99/Project-Factory.git
+    cd Project-Factory
+    docker-compose build
+    docker-compose up
