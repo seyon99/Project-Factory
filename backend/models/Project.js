@@ -4,6 +4,7 @@ export default (mongoose) => {
         userId: String,
         projectId: Number,
         description: String,
+        projectPic: String,
         date: Date,
         collaborationStatus: Boolean,
         numCollaborators: Number,
