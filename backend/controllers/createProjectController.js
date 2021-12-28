@@ -37,7 +37,7 @@ const uploadFile = (bucketID) =>
 
     // update following 2 methods and bucket ID
 const uploadPicture = (router, Project) => {
-    router.post("/uploadprofilepic", [verifyUser], (req, res) => {
+    router.post("/uploadpprojectpic", [verifyUser], (req, res) => {
         const singleUpload = uploadResume("c01steadfastsols").single("resume");
         singleUpload(req, res, (err) => {
             if (err)
