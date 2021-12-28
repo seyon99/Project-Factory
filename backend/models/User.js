@@ -5,7 +5,7 @@ export default UserModel = (mongoose) => {
         password: String,
         firstName: String,
         lastName: String,
-        profilePicture: String, // image link stored using AWS S3
+        profilePicture: String, // image link (image stored using AWS S3)
         university: String,
         major: String,
         metadata: Array,
