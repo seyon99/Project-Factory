@@ -3,7 +3,7 @@
 ## About
 This web app was designed to allow CS/SE students to share their software side projects and find collaborators.
 
-## Technologies Used:
+## Technologies Used
 
 - TypeScript
 - MongoDB
@@ -18,7 +18,7 @@ This web app was designed to allow CS/SE students to share their software side p
   2. MongoDB Cloud
   3. Docker
 
-## Building/running:
+## Building/running
 
     git clone https://github.com/seyon99/Project-Factory.git
     cd Project-Factory
