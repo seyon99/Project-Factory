@@ -7,6 +7,7 @@ interface Values {
     projName: string;
     description: string;
     stack: string;
+    repoLink: string;
 }
 
 interface Props {
@@ -16,7 +17,7 @@ interface Props {
 export const MyForm: React.FC<Props> = ({ onSubmit }) => {
     return (
         <Formik
-            initialValues={{ projName: "", description: "", stack: "" }}
+            initialValues={{ projName: "", description: "", stack: "", repoLink: "" }}
             onSubmit={values => {
                 onSubmit(values);
             }}
@@ -40,7 +41,7 @@ export const MyForm: React.FC<Props> = ({ onSubmit }) => {
                     <div>
                         <Field
                             name="stack"
-                            placeholder="Determines if picture is of a hotdog"
+                            placeholder="Python, TypeScript, C"
                             component={MyField}
                         />
                     </div>
@@ -51,7 +52,7 @@ export const MyForm: React.FC<Props> = ({ onSubmit }) => {
                             component={MyField}
                         />
                     </div>
-                    <Button type="submit">submit</Button>
+                    <Button type="submit">Submit</Button>
                     <pre>{JSON.stringify(values, null, 2)}</pre>
                 </Form>
             )}
