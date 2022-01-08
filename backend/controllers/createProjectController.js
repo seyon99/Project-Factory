@@ -38,7 +38,7 @@ const uploadFile = (bucketID) =>
     // update following 2 methods and bucket ID
 const uploadPicture = (router, Project) => {
     router.post("/uploadpprojectpic", [verifyUser], (req, res) => {
-        const singleUpload = uploadResume("c01steadfastsols").single("resume");
+        const singleUpload = uploadResume("project-factory").single("resume");
         singleUpload(req, res, (err) => {
             if (err)
                 return res.status(400).json({ success: false, message: err.message });
@@ -52,7 +52,7 @@ const uploadPicture = (router, Project) => {
 
 const uploadProjectRepo = (router, JobseekerProfile) => {
     router.post("/uploadrepo", [verifyUser], (req, res) => {
-        const singleUpload = uploadResume("c01steadfastsols").single("resume");
+        const singleUpload = uploadResume("project-factory").single("resume");
         singleUpload(req, res, (err) => {
             if (err)
                 return res.status(400).json({ success: false, message: err.message });
