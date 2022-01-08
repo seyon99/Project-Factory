@@ -63,3 +63,5 @@ const uploadProjRepo = (router, JobseekerProfile) => {
         });
     });
 };
+
+module.exports = { uploadProjPicture, uploadProjRepo };

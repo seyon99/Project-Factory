@@ -13,7 +13,7 @@ const passport = require("passport");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
-const uploadProjectRoute = require("./controllers/createProjectController")
+const { uploadProjPicture, uploadProjRepo } = require("./controllers/createProjectController")
 
 var basePath = '/api';
 var port = process.env.API_PORT;
@@ -38,107 +38,112 @@ const server = app.listen(API_PORT, () => {
 mongoose.connect(process.env.MONGO_URI).then((db) => {
   const User = require("./models/User")(db);
   const Project = require("./models/Project")(db);
-});
 
-app.get(`${BASE_URL}`, (req, res) => {
-  res.send("Project Factory API");
-});
 
-// Setup body-parser middleware
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-    parameterLimit: 100000000,
-    limit: "50mb",
-  })
-);
-app.use(bodyParser.json({ limit: "50mb", parameterLimit: 100000000 }));
+  app.get(`${BASE_URL}`, (req, res) => {
+    res.send("Project Factory API");
+  });
 
-// Initialize passport
-app.use(passport.initialize());
+  // Setup body-parser middleware
+  app.use(
+    bodyParser.urlencoded({
+      extended: true,
+      parameterLimit: 100000000,
+      limit: "50mb",
+    })
+  );
+  app.use(bodyParser.json({ limit: "50mb", parameterLimit: 100000000 }));
 
-// Initialize passport strategies
-require("./middleware/localStrategy")(User, passport);
+  // Initialize passport
+  app.use(passport.initialize());
 
-// Setup Router
-app.use(`${BASE_URL}`, router);
+  // Initialize passport strategies
+  require("./middleware/localStrategy")(User, passport);
 
-// Verify JWT endpoint
-router.get(`/user/verify_header`, verifyUser, (req, res, next) => {
-  const decoded = res.locals.authData;
-  res.status(200).json({ status: "Authorized", data: decoded });
-});
+  // Setup Router
+  app.use(`${BASE_URL}`, router);
 
-// Google OAuth2 endpoint callback
-router.get(`/user/auth/google_callback`, (req, res, next) => {
-  passport.authenticate(
-    "google-login",
-    { session: false },
-    (err, user, info) => {
+  // Verify JWT endpoint
+  router.get(`/user/verify_header`, verifyUser, (req, res, next) => {
+    const decoded = res.locals.authData;
+    res.status(200).json({ status: "Authorized", data: decoded });
+  });
+
+  // Google OAuth2 endpoint callback
+  router.get(`/user/auth/google_callback`, (req, res, next) => {
+    passport.authenticate(
+      "google-login",
+      { session: false },
+      (err, user, info) => {
+        if (err) {
+          return next(err);
+        }
+        if (!user) {
+          res.redirect(
+            `${process.env.BASE_URL}:${process.env.FRONTEND_PORT}/signin`
+          );
+        } else {
+          const token = signJwt(user);
+          const returnData = Buffer.from(
+            JSON.stringify({
+              token: token,
+              authData: jwt.decode(token, { json: true, complete: true }),
+            })
+          ).toString("base64");
+          res.redirect(
+            `${process.env.BASE_URL}:${process.env.FRONTEND_PORT}/signin/callback/?d=${returnData}`
+          );
+        }
+      }
+    )(req, res, next);
+  });
+
+  router.get(
+    `/user/auth/google`,
+    passport.authenticate("google-login", {
+      scope: ["email", "profile"],
+    })
+  );
+
+  // Login route with Passport
+  router.post(`/user/authenticate`, (req, res, next) => {
+    passport.authenticate("local-signin", (err, user, info) => {
       if (err) {
         return next(err);
       }
       if (!user) {
-        res.redirect(
-          `${process.env.BASE_URL}:${process.env.FRONTEND_PORT}/signin`
-        );
-      } else {
-        const token = signJwt(user);
-        const returnData = Buffer.from(
-          JSON.stringify({
-            token: token,
-            authData: jwt.decode(token, { json: true, complete: true }),
-          })
-        ).toString("base64");
-        res.redirect(
-          `${process.env.BASE_URL}:${process.env.FRONTEND_PORT}/signin/callback/?d=${returnData}`
-        );
+        return res.status(401).json({
+          message: "Login failed.",
+        });
       }
-    }
-  )(req, res, next);
-});
+      const token = signJwt(user);
 
-router.get(
-  `/user/auth/google`,
-  passport.authenticate("google-login", {
-    scope: ["email", "profile"],
-  })
-);
-
-// Login route with Passport
-router.post(`/user/authenticate`, (req, res, next) => {
-  passport.authenticate("local-signin", (err, user, info) => {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      return res.status(401).json({
-        message: "Login failed.",
+      return res.status(200).json({
+        message: "Login successful",
+        token: token,
+        authData: jwt.decode(token, { json: true, complete: true }),
       });
-    }
-    const token = signJwt(user);
+    })(req, res, next);
+  });
 
-    return res.status(200).json({
-      message: "Login successful",
-      token: token,
-      authData: jwt.decode(token, { json: true, complete: true }),
-    });
-  })(req, res, next);
-});
-
-router.post(`/user/create`, (req, res, next) => {
-  console.log("Reached API");
-  passport.authenticate("local-signup", (err, user, info) => {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      return res.status(409).json({
-        message: info.message,
+  router.post(`/user/create`, (req, res, next) => {
+    console.log("Reached API");
+    passport.authenticate("local-signup", (err, user, info) => {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        return res.status(409).json({
+          message: info.message,
+        });
+      }
+      return res.status(200).json({
+        message: "Registration successful",
       });
-    }
-    return res.status(200).json({
-      message: "Registration successful",
-    });
-  })(req, res, next);
+    })(req, res, next);
+  });
+
+  uploadProjRepo(router, User, Project);
+
+  uploadProjRepo(router, User, Project)
 });
