@@ -36,13 +36,13 @@ const uploadFile = (bucketID) =>
     });
 
     // update following 2 methods and bucket ID
-const uploadPicture = (router, Project) => {
-    router.post("/uploadpprojectpic", [verifyUser], (req, res) => {
-        const singleUpload = uploadResume("project-factory").single("resume");
+const uploadProjPicture = (router, Project) => {
+    router.post("/uploadprojectpic", [verifyUser], (req, res) => {
+        const singleUpload = uploadProjPic("project-factory").single("project-pic");
         singleUpload(req, res, (err) => {
             if (err)
                 return res.status(400).json({ success: false, message: err.message });
-            JobseekerProfile.updateOne(
+            Project.updateOne(
                 { email: res.locals.authData.email },
                 { $set: { resumeUrl: req.file.location } }
             ).then(() => res.status(200).json({ data: req.file.location }));
@@ -50,15 +50,15 @@ const uploadPicture = (router, Project) => {
     });
 };
 
-const uploadProjectRepo = (router, JobseekerProfile) => {
+const uploadProjRepo = (router, JobseekerProfile) => {
     router.post("/uploadrepo", [verifyUser], (req, res) => {
-        const singleUpload = uploadResume("project-factory").single("resume");
+        const singleUpload = uploadRepo("project-factory");
         singleUpload(req, res, (err) => {
             if (err)
                 return res.status(400).json({ success: false, message: err.message });
             JobseekerProfile.updateOne(
-                { email: res.locals.authData.email },
-                { $set: { resumeUrl: req.file.location } }
+                { userId: res.locals.authData.email },
+                { $set: { repo: req.file.location } }
             ).then(() => res.status(200).json({ data: req.file.location }));
         });
     });
