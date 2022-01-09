@@ -99,5 +99,8 @@
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13"
   }
 }
