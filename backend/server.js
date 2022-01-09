@@ -145,5 +145,7 @@ mongoose.connect(process.env.MONGO_URI).then((db) => {
 
   uploadProjRepo(router, User, Project);
 
-  uploadProjRepo(router, User, Project)
+  uploadProjPicture(router, User, Project);
+
+  
 });

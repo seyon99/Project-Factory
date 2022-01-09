@@ -1,7 +1,7 @@
 export default (mongoose) => {
     const ProjectSchema= new mongoose.Schema(
       {
-        userId: String,
+        userId: String, // user email (pseudo-foreign key to access records in Users collection)
         projectId: Number,
         description: String,
         projectPic: String,
