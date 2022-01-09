@@ -14,6 +14,8 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
 const { uploadProjPicture, uploadProjRepo } = require("./controllers/createProjectController")
+const uploadProjectRoute = require("./controllers/uploadProjectController");
+const viewProjectsRoute = require("./controllers/viewProjectsController");
 
 var basePath = '/api';
 var port = process.env.API_PORT;
@@ -147,5 +149,8 @@ mongoose.connect(process.env.MONGO_URI).then((db) => {
 
   uploadProjPicture(router, User, Project);
 
-  
+  uploadProjectRoute(router, Project);
+
+  viewProjectsRoute(router, Project);
+
 });
